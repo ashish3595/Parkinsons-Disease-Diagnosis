@@ -1,0 +1,22 @@
+The issue is what represents a good measure of distance between cases.
+
+If you have two features, one where the differences between cases is large and the other small, are you prepared to have the former as almost the only driver of distance?
+
+So for example if you clustered people on their weights in kilograms and heights in metres, is a 1kg difference as significant as a 1m difference in height? Does it matter that you would get different clusterings on weights in kilograms and heights in centimetres? If your answers are "no" and "yes" respectively then you should probably scale.
+
+On the other hand, if you were clustering Canadian cities based on distances east/west and distances north/south then, although there will typically be much bigger differences east/west, you may be happy just to use unscaled distances in either kilometres or miles (though you might want to adjust degrees of longitude and latitude for the curvature of the earth).
+
+--------------------
+It depends on your data.
+
+If you have attributes with a well-defined meaning. Say, latitude and longitude, then you should not scale your data, because this will cause distortion. (K-means might be a bad choice, too - you need something that can handle lat/lon naturally)
+
+If you have mixed numerical data, where each attribute is something entirely different (say, shoe size and weight), has different units attached (lb, tons, m, kg ...) then these values aren't really comparable anyway; z-standardizing them is a best-practise to give equal weight to them.
+
+If you have binary values, discrete attributes or categorial attributes, stay away from k-means. K-means needs to compute means, and the mean value is not meaningful on this kind of data.
+
+
+---------------
+As explained in this paper, the k-means minimizes the error function using the Newton algorithm, i.e. a gradient-based optimization algorithm. Normalizing the data improves convergence of such algorithms. See here for some details on it.
+
+The idea is that if different components of data (features) have different scales, then derivatives tend to align along directions with higher variance, which leads to poorer/slower convergence.
